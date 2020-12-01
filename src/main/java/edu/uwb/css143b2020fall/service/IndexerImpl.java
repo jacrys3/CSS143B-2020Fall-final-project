@@ -11,7 +11,18 @@ import java.util.Map;
 public class IndexerImpl implements Indexer {
     public Map<String, List<List<Integer>>> index(List<String> docs) {
         Map<String, List<List<Integer>>> indexes = new HashMap<>();
-        // add your code
+        ArrayList<String> words = new ArrayList<>();
+
+        for (int i = 0; i < docs.size(); i++) {
+            String str = docs.get(i);
+            String[] data = str.split(" ");
+            for(int k = 0; k < data.length; k++)
+                words.add(data[k]);
+        }
+
+        for (int i = 0; i < words.size(); i++) {
+            System.out.println(words.get(i));
+        }
         return indexes;
     }
 }
