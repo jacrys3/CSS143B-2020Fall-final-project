@@ -12,22 +12,23 @@ public class IndexerImpl implements Indexer {
     public Map<String, List<List<Integer>>> index(List<String> docs) {
         Map<String, List<List<Integer>>> indexes = new HashMap<>();
 
-
         for (int i = 0; i < docs.size(); i++) {
             List<List<Integer>> pos = new ArrayList<>();
-            List<Integer> doc = new ArrayList<>();
             String str = docs.get(i);
             String[] title = str.split(" ");
-            for(int k = 0; k < title.length - 1; k++){
+            for(int k = 0; k < docs.size(); k++){
+                List<Integer> doc = new ArrayList<>();
                 String str2 = docs.get(k);
                 String[] strin = str2.split(" ");
-                if(title[i].equals(strin[k])){
-                    doc.add(k);
+                for (int j = 0; j < strin.length; j++) {
+                    if(title[i].equals(strin[j])){
+                        doc.add(j);
+                    }
                 }
+                pos.add(doc);
             }
-            pos.add(doc);
+
             indexes.put(title[i], pos);
-            //try to have separate for loops for adding to the individual doc lists and one for adding those lists to the hashmap
         }
 
         return indexes;
