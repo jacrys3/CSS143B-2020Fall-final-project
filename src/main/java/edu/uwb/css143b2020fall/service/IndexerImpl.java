@@ -14,9 +14,8 @@ public class IndexerImpl implements Indexer {
             String str = docs.get(i);
             String[] title = str.split(" ");
             for (int j = 0; j < title.length; j++) {
-                if(words.get(title[j]) != null){
-                    continue;
-                }
+                if(title[j].equals("")) continue;
+                if(words.get(title[j]) != null) continue;
                 words.put(title[j], title[j]);
             }
         }
