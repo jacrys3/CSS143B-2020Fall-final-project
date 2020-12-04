@@ -14,7 +14,8 @@ public class IndexerImpl implements Indexer {
             String str = docs.get(i);
             String[] title = str.split(" ");
             for (int j = 0; j < title.length; j++) {
-                if(title[j].equals("")) continue;
+                if(title[j].equals("")) continue; // skips empty words since more than one space next to each other
+                // create empty words from the split function.
                 if(words.get(title[j]) != null) continue;
                 words.put(title[j], title[j]);
             }
