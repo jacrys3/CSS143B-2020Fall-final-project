@@ -29,33 +29,18 @@ public class IndexerImpl implements Indexer {
                 String str = docs.get(j);
                 String[] line = str.split(" ");
                 List<Integer> doc = new ArrayList<>();
+                int count = 0;
                 for (int k = 0; k < line.length; k++) {
                     if (word[i].equals(line[k])) {
-                        doc.add(k);
+                        doc.add(count);
                     }
+                    if(!line[k].equals("")) count++; // This is here because split still counts "" as a word and so
+                    // count will not increment if the word is "" because that is not actually a word.
                 }
                 pos.add(doc);
             }
             indexes.put((String) word[i], pos);
         }
-
-        /*for (int i = 0; i < docs.size(); i++) { //goes through each doc
-            List<List<Integer>> pos = new ArrayList<>();
-            String str = docs.get(i);
-            String[] title = str.split(" ");
-            for (int k = 0; k < docs.size(); k++) { // goes through each doc again to get words to compare
-                List<Integer> doc = new ArrayList<>();
-                String str2 = docs.get(k);
-                String[] strin = str2.split(" ");
-                for (int j = 0; j < strin.length; j++) { // goes through each word in strin and compares to the first word in title
-                    if (title[i].equals(strin[j])) { // if i word in title is the same as the word in strin add index to list
-                        doc.add(j);
-                    }
-                }
-                pos.add(doc);
-            }
-            indexes.put(title[i], pos);
-        }*/
 
         return indexes;
     }
