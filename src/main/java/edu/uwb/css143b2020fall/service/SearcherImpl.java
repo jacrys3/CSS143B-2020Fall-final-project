@@ -31,6 +31,7 @@ public class SearcherImpl implements Searcher {
         List<Integer> allWordsGood = new ArrayList<>();
         for (int i = 0; i < words.length - 1; i++) {
             allWordsGood = compareDocs(getDocs(words[i], index), getDocs(words[i + 1], index), words[i], words[i + 1]);
+            //need to check if this list is the same as the previous one when searching with more than two number
         }
         return allWordsGood;
     }
@@ -51,10 +52,10 @@ public class SearcherImpl implements Searcher {
 
     private List<Integer> compareDocs(List<Integer> l1, List<Integer> l2, String s1, String s2) {
         List<Integer> combined = new ArrayList<>();
-        for (int i = 0; i < l1.size(); i++) {
-            for (int j = 0; j < l2.size(); j++) {
-                if (l1.get(i) == l2.get(j) && checkIndexOrder(s1, s2, l1.get(i))) {
-                    combined.add(l1.get(i));
+        for (int doc : l1) {
+            for (int doc2 : l2){
+                if(doc == doc2 && checkIndexOrder(s1, s2, doc)){
+                    combined.add(doc);
                 }
             }
         }
