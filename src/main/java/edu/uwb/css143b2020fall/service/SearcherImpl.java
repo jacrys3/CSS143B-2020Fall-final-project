@@ -8,11 +8,11 @@ import java.util.Map;
 
 @Service
 public class SearcherImpl implements Searcher {
-    private Map<String, List<List<Integer>>> map;
+    private Map<String, List<List<Integer>>> map; // I hope this is allowed, just wanted to be able to use the index
+    //map in a function without having to pass it through each time in a function
     
     public List<Integer> search(String keyPhrase, Map<String, List<List<Integer>>> index) {
         map = index;
-        List<Integer> result = new ArrayList<>();
         boolean isRealWord = true;
         String[] words = keyPhrase.split(" ");
 
@@ -26,9 +26,8 @@ public class SearcherImpl implements Searcher {
                 isRealWord = true;
             }
         }
-        if (!isRealWord) {
-            return new ArrayList<>();
-        }
+        if (!isRealWord) return new ArrayList<>();
+
         List<Integer> allWordsGood = new ArrayList<>();
         for (int i = 0; i < words.length - 1; i++) {
             allWordsGood = compareDocs(getDocs(words[i], index), getDocs(words[i + 1], index), words[i], words[i + 1]);
@@ -47,7 +46,6 @@ public class SearcherImpl implements Searcher {
                     indexes.add(i);
             }
         }
-
         return indexes;
     }
 

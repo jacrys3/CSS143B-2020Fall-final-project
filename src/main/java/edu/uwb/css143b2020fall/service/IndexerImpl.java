@@ -10,7 +10,8 @@ public class IndexerImpl implements Indexer {
         Map<String, List<List<Integer>>> indexes = new HashMap<>();
         Map<String, String> words = new HashMap<>();
 
-        for(int i = 0; i < docs.size(); i++){ // adds all the words from the docs to a map
+        for(int i = 0; i < docs.size(); i++){ // this part adds all the different words in the docs into one array
+            // to be used in the next part
             String str = docs.get(i);
             String[] title = str.split(" ");
             for (int j = 0; j < title.length; j++) {
@@ -24,7 +25,8 @@ public class IndexerImpl implements Indexer {
         Collection<String> wordList = words.values();
         Object[] word = wordList.toArray();
 
-        for (int i = 0; i < word.length; i++) {
+        for (int i = 0; i < word.length; i++) { // this part searches for the indexes of the words from the list
+            // and puts them into the list indexes so it can be returned
             List<List<Integer>> pos = new ArrayList<>();
             for (int j = 0; j < docs.size(); j++) {
                 String str = docs.get(j);
@@ -42,7 +44,6 @@ public class IndexerImpl implements Indexer {
             }
             indexes.put((String) word[i], pos);
         }
-
         return indexes;
     }
 }
