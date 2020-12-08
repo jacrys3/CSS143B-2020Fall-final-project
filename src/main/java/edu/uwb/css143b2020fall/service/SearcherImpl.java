@@ -13,21 +13,16 @@ public class SearcherImpl implements Searcher {
     
     public List<Integer> search(String keyPhrase, Map<String, List<List<Integer>>> index) {
         map = index;
-        boolean isRealWord = true;
         String[] words = keyPhrase.split(" ");
 
         for (int i = 0; i < words.length; i++) {
             List<Integer> docIndexes = getDocs(words[i], index);
             if (docIndexes == null || docIndexes.size() == 0) {
-                isRealWord = false;
+                return new ArrayList<>();
             } else if (words.length == 1) {
                 return docIndexes;
-            } else {
-                isRealWord = true;
             }
         }
-        if (!isRealWord) return new ArrayList<>();
-
         List<Integer> allWordsGood = new ArrayList<>();
         for (int i = 0; i < words.length - 1; i++) {
             allWordsGood = compareDocs(getDocs(words[i], index), getDocs(words[i + 1], index), words[i], words[i + 1]);
