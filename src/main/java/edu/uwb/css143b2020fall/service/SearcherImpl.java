@@ -26,7 +26,7 @@ public class SearcherImpl implements Searcher {
         }
         List<Integer> commonIndexes = new ArrayList<>();
         for (int i = 0; i < words.length - 1; i++) {
-            if(words[i].equals(words[i + 1])) return new ArrayList<>();
+            //if(words[i].equals(words[i + 1])) return new ArrayList<>(); this is very wrong
             commonIndexes = compareDocs(getDocs(words[i], index), getDocs(words[i + 1], index));
             if(commonIndexes == null) return new ArrayList<>();
             List<Integer> checkedIndexes = checkIndexOrder(words[i], words[i + 1], commonIndexes);
