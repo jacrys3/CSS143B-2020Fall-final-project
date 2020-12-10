@@ -11,7 +11,7 @@ import java.util.Map;
 public class SearcherImpl implements Searcher {
     private Map<String, List<List<Integer>>> map; // I hope this is allowed, just wanted to be able to use the index
     //map in a function without having to pass it through each time in a function
-    
+
     public List<Integer> search(String keyPhrase, Map<String, List<List<Integer>>> index) {
         map = index;
         String[] words = keyPhrase.split(" ");
@@ -25,14 +25,22 @@ public class SearcherImpl implements Searcher {
             }
         }
         List<Integer> commonIndexes = new ArrayList<>();
+        List<Integer> previous = new ArrayList<>();
         for (int i = 0; i < words.length - 1; i++) {
-            //if(words[i].equals(words[i + 1])) return new ArrayList<>(); this is very wrong
-            commonIndexes = compareDocs(getDocs(words[i], index), getDocs(words[i + 1], index));
-            if(commonIndexes == null) return new ArrayList<>();
-            List<Integer> checkedIndexes = checkIndexOrder(words[i], words[i + 1], commonIndexes);
-            if(checkedIndexes != null){
-                commonIndexes = checkedIndexes;
+            commonIndexes = compareDocs(getDocs(words[i], index), getDocs(words[i + 1], index), words[i], words[i + 1]);
+            if(previous.size() != 0){
+                boolean check = false;
+                for (int pre : previous) {
+                    for(int com : commonIndexes){
+                        if(pre == com){
+                            check = true;
+                        }
+                    }
+                }
+                if(!check) return new ArrayList<>();
             }
+            if (commonIndexes.size() == 0) return new ArrayList<>();
+            previous = commonIndexes;
         }
         return commonIndexes;
     }
@@ -51,11 +59,11 @@ public class SearcherImpl implements Searcher {
         return indexes;
     }
 
-    private List<Integer> compareDocs(List<Integer> l1, List<Integer> l2) {
+    private List<Integer> compareDocs(List<Integer> l1, List<Integer> l2, String s1, String s2) {
         List<Integer> combined = new ArrayList<>();
         for (int doc : l1) {
-            for (int doc2 : l2){
-                if(doc == doc2){
+            for (int doc2 : l2) {
+                if (doc == doc2 && checkIndexOrder(s1, s2, doc)) {
                     combined.add(doc);
                 }
             }
@@ -63,21 +71,19 @@ public class SearcherImpl implements Searcher {
         return combined;
     }
 
-    private List<Integer> checkIndexOrder(String s1, String s2, List<Integer> docNumbers){
-        List<Integer> result = new ArrayList<>();
+    private boolean checkIndexOrder(String s1, String s2, int docNumber) {
         List<List<Integer>> index1 = map.get(s1);
         List<List<Integer>> index2 = map.get(s2);
-        for (int k = 0; k < docNumbers.size(); k++) {
-            List<Integer> index1Mini = index1.get(docNumbers.get(k));
-            List<Integer> index2Mini = index2.get(docNumbers.get(k));
-            for (int i = 0; i < index1Mini.size(); i++) {
-                for (int j = 0; j < index2Mini.size(); j++) {
-                    if(index1Mini.get(i) < index2Mini.get(j) && index2Mini.get(j) - index1Mini.get(i) == 1) {
-                        result.add(docNumbers.get(k));
-                    }
+        List<Integer> index1Mini = index1.get(docNumber);
+        List<Integer> index2Mini = index2.get(docNumber);
+        for (int i = 0; i < index1Mini.size(); i++) {
+            for (int j = 0; j < index2Mini.size(); j++) {
+                if (index1Mini.get(i) < index2Mini.get(j) && index2Mini.get(j) - index1Mini.get(i) == 1) {
+                    return true;
                 }
             }
         }
-        return result;
+
+        return false;
     }
 }
